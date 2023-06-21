@@ -1,3 +1,6 @@
+# Link for Google sheets
+# https://docs.google.com/spreadsheets/d/1jlfiwJWA9vMlT9f-_tzIEOpvGNdn23GGS32zTZgA1HM/edit?resourcekey#gid=1514182019
+
 import requests
 import time
 from bs4 import BeautifulSoup
