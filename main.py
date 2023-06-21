@@ -10,15 +10,15 @@ from selenium.webdriver.common.by import By
 
 chrome_options = Options()
 chrome_options.add_experimental_option("detach", True)
-chrome_driver_path = r"C:\Users\Zemmente\Desktop\chromedriver"
+chrome_driver_path = "YOUR DRIVE PATH"
 driver = webdriver.Chrome(options=chrome_options)
 
 URL = 'https://www.njuskalo.hr/prodaja-stanova/dugo-selo?price%5Bmax%5D=150000&buildingInfo%5Bnew-building%5D=1&parkingSpotType%5Bparking-garage%5D=1&parkingSpotType%5Bgarage-spot%5D=1&parkingSpotType%5Bparking-outdoor-covered%5D=1'
 
+# This info can be found on: https://myhttpheader.com/
 header = {
-  "User-Agent":
-  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
-  "Accept-Language": "hr-HR,hr;q=0.9,en-US;q=0.8,en;q=0.7"
+  "User-Agent": "YOUR USER AGENT",
+  "Accept-Language": "YOUR LANGUGAGE"
 }
 
 response = requests.get(URL, headers=header)
@@ -42,7 +42,7 @@ description_list_clean = list(filter(None, description_list))
 links = soup.select('div > ul > li > article > h3 > a')
 links_list = ['www.njuskalo.hr' + link.get('href') for link in links]
 min_length = min(len(prices_list_clean), len(description_list_clean))
-# Make sure the links_list is equal to length of the other two lists
+# Make sure the links_list is equal to length of the other two lists (because it get other links as well)
 links_list = links_list[:min_length]
 
 
