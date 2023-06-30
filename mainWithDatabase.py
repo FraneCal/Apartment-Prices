@@ -1,6 +1,5 @@
 import requests
 import sqlite3
-import time
 from bs4 import BeautifulSoup
 
 # Create table if it doesn't exist
