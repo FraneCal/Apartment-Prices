@@ -11,7 +11,7 @@ create_table_query = '''CREATE TABLE IF NOT EXISTS Apartments (
                         );
     '''
 
-database_name = 'Stanovi.db'
+database_name = 'Apartments.db'
 
 # Connect to database and create a cursor
 sc = sqlite3.connect(database_name)
