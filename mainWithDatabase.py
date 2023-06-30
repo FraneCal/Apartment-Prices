@@ -22,10 +22,10 @@ cursor.execute(create_table_query)
 URL = 'https://www.njuskalo.hr/prodaja-stanova/dugo-selo?price%5Bmax%5D=150000&buildingInfo%5Bnew-' \
       'building%5D=1&parkingSpotType%5Bparking-garage%5D=1&parkingSpotType%5Bgarage-spot%5D=1&parkingSpotType%5Bparking-outdoor-covered%5D=1'
 
+# This info can be found on: https://myhttpheader.com/
 header = {
-  "User-Agent":
-  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
-  "Accept-Language": "hr-HR,hr;q=0.9,en-US;q=0.8,en;q=0.7"
+  "User-Agent": "YOUR USER AGENT",
+  "Accept-Language": "YOUR LANGUGAGE"
 }
 
 response = requests.get(URL, headers=header)
