@@ -80,3 +80,22 @@ adresses_list_clean = [adress.getText() for adress in adresses_dirty]
 
 
 
+
+
+import scrapy
+
+class ZillowSpider(scrapy.Spider):
+  name = "zillow"
+  # start_urls = [
+  #     # Add the Zillow search result URL here
+  #     "https://www.zillow.com/san-francisco-ca/?searchQueryState=%7B%22pagination%22%3A%7B%7D%2C%22usersSearchTerm%22%3A%22San%20Francisco%2C%20CA%22%2C%22mapBounds%22%3A%7B%22west%22%3A-122.52499667529297%2C%22east%22%3A-122.34166232470703%2C%22south%22%3A37.662044543503555%2C%22north%22%3A37.88836615784793%7D%2C%22regionSelection%22%3A%5B%7B%22regionId%22%3A20330%2C%22regionType%22%3A6%7D%5D%2C%22isMapVisible%22%3Atrue%2C%22filterState%22%3A%7B%22sort%22%3A%7B%22value%22%3A%22days%22%7D%2C%22ah%22%3A%7B%22value%22%3Atrue%7D%7D%2C%22isListVisible%22%3Atrue%2C%22mapZoom%22%3A12%7D"
+  # ]
+  start_urls = [
+    "https://quotes.toscrape.com/"
+  ]
+
+  def parse(self, response):
+    price = response.xpath("//title/text()").extract()
+    print(price)
+
+
