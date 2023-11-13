@@ -23,12 +23,15 @@ user_agents = [
 
 service = Service()
 options = webdriver.ChromeOptions()
+# TRYING TO ACT LIKE HUMAN
 options.add_argument(f"user-agent={random.choice(user_agents)}")
 driver = webdriver.Chrome(service=service, options=options)
 
 driver.get(URL)
+# AGAIN TRYING TO ACT LIKE HUMAN
 time.sleep(random.uniform(3, 5))
 
+# SCROLLING DOWN THE PAGE TO LOAD ALL OF THE APARTMENTS
 scroll_increment = 0
 while scroll_increment < 600: 
     driver.execute_script(f"window.scrollTo(0, {scroll_increment * 10});")
