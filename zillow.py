@@ -3,6 +3,8 @@ from selenium.webdriver.chrome.service import Service
 from bs4 import BeautifulSoup
 import time
 import random
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 
 
 URL = "https://www.zillow.com/san-francisco-ca/?searchQueryState=%7B%22pagination%22%3A%7B%7D%2C%22usersSearchTerm%22%3A%22San%20Francisco%2C%20CA%22%2C%22mapBounds%22%3A%7B%22west%22%3A-122.52499667529297%2C%22east%22%3A-122.34166232470703%2C%22south%22%3A37.662044543503555%2C%22north%22%3A37.88836615784793%7D%2C%22regionSelection%22%3A%5B%7B%22regionId%22%3A20330%2C%22regionType%22%3A6%7D%5D%2C%22isMapVisible%22%3Atrue%2C%22filterState%22%3A%7B%22sort%22%3A%7B%22value%22%3A%22days%22%7D%2C%22ah%22%3A%7B%22value%22%3Atrue%7D%7D%2C%22isListVisible%22%3Atrue%2C%22mapZoom%22%3A12%7D"
@@ -38,28 +40,46 @@ driver.quit()
 
 soup = BeautifulSoup(web_page, 'lxml')
 
+# ---------------- Prices ---------------- #
+prices = soup.find_all("span", class_="PropertyCardWrapper__StyledPriceLine-srp__sc-16e8gqd-1 iMKTKr")
+prices_list = [price.getText().split()[0] for price in prices if price.getText().startswith('$')]
+#print(prices_list)
 
-#---------------- Prices ----------------#
-prices_dirty = soup.find_all("span", class_="PropertyCardWrapper__StyledPriceLine-srp__sc-16e8gqd-1 iMKTKr")
-prices_list_clean = [price.getText().split()[0] for price in prices_dirty if price.getText().startswith('$')]
-print(prices_list_clean)
-
-#---------------- Bedrooms and bathrooms ----------------#
-quantity_dirty = soup.find_all("ul", class_="StyledPropertyCardHomeDetailsList-c11n-8-84-3__sc-1xvdaej-0 eYPFID")
-quantity_list_clean = [
+# ---------------- Bedrooms and bathrooms ---------------- #
+quantities = soup.find_all("ul", class_="StyledPropertyCardHomeDetailsList-c11n-8-84-3__sc-1xvdaej-0 eYPFID")
+quantity_list = [
     " ".join(
         q.getText(strip=True)
         for q in quantity.select("li")
         if not q.getText().startswith("--")
     )
-    for quantity in quantity_dirty
+    for quantity in quantities
 ]
-print(quantity_list_clean)
+#print(quantity_list)
 
-#---------------- Adresses ----------------#
-adresses_dirty = soup.find_all("address")
-adresses_list_clean = [adress.getText() for adress in adresses_dirty]
-print(adresses_list_clean)
+# ---------------- Addresses ---------------- #
+adresses = soup.find_all("address")
+adresses_list = [adress.getText() for adress in adresses]
+#print(adresses_list)
+
+# ---------------- LINKS ---------------- #
+links = soup.find_all("a", class_="StyledPropertyCardDataArea-c11n-8-84-3__sc-yipmu-0 jnnxAW property-card-link")
+links_clean = [link.get("href") for link in links]
+#print(links_clean)
+
+
+# ---------------- MERGED LIST OF EVERYTHING ---------------- #
+merged_list = [[prices_list[i], quantity_list[i], adresses_list[i], links_clean[i]] for i in range(len(prices_list))]
+
+
+# ---------------- WRITING TO GOOGLE SHEETS ---------------- #
+scope = ['https://www.googleapis.com/auth/spreadsheets', "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
+creds = ServiceAccountCredentials.from_json_keyfile_name("client_secret.json", scope)
+client = gspread.authorize(creds)
+sheet = client.open("PythonSheets").sheet1
+
+for row_number in range(len(prices_list)):
+    sheet.insert_row([prices_list[row_number], quantity_list[row_number], adresses_list [row_number], links_clean[row_number]], 2+row_number)
 
 
 
