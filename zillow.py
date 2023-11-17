@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 import time
 import random
@@ -36,7 +37,12 @@ scroll_increment = 0
 while scroll_increment < 600: 
     driver.execute_script(f"window.scrollTo(0, {scroll_increment * 10});")
     time.sleep(random.uniform(1, 2))
-    scroll_increment += 100
+    scroll_increment += 50
+
+# GO TO NEXT PAGE
+# second_page = driver.find_element(By.XPATH, '//*[@id="grid-search-results"]/div[2]/nav/ul/li[3]/a')
+# time.sleep(1)
+# second_page.click()
 
 web_page = driver.page_source
 driver.quit()
@@ -82,8 +88,8 @@ client = gspread.authorize(creds)
 sheet = client.open("PythonSheets").sheet1
 
 for row_number in range(len(prices_list)):
-    sheet.insert_row([prices_list[row_number], quantity_list[row_number], adresses_list [row_number], links_clean[row_number]], 2+row_number)
-
+    if row_number <= len(prices_list):
+        sheet.insert_row([prices_list[row_number], quantity_list[row_number], adresses_list [row_number], links_clean[row_number]], 2+row_number)
 
 
 
